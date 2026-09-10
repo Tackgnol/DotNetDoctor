@@ -59,7 +59,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Tool installation failed.' }
 
     foreach ($installedFile in @('bootstrap-server-core.json', 'dotnet-code-quality.json', 'profile.v1.schema.json', 'CONFIGURATION.md')) {
-        if (-not (Get-ChildItem -LiteralPath $toolDir -Recurse -File -Filter $installedFile)) {
+        if (-not (Get-ChildItem -LiteralPath $toolDir -Recurse -Force -File -Filter $installedFile)) {
             throw "Installed tool is missing $installedFile."
         }
     }
@@ -104,7 +104,7 @@ try {
     $sarif = Get-Content -Raw -LiteralPath $sarifPath | ConvertFrom-Json
     if ($sarif.version -ne '2.1.0' -or @($sarif.runs).Count -ne 1) { throw 'Packaged SARIF output is invalid.' }
 
-    $installedQualityProfile = Get-ChildItem -LiteralPath $toolDir -Recurse -File -Filter 'dotnet-code-quality.json' | Select-Object -First 1
+    $installedQualityProfile = Get-ChildItem -LiteralPath $toolDir -Recurse -Force -File -Filter 'dotnet-code-quality.json' | Select-Object -First 1
     $sampleQualityProfile = Join-Path $sampleDir '.repo-doctor/dotnet-code-quality.json'
     Copy-Item -LiteralPath $installedQualityProfile.FullName -Destination $sampleQualityProfile
     @{
