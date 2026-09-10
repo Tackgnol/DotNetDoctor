@@ -36,10 +36,10 @@
     <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
     <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
     <None Include="..\..\THIRD_PARTY_NOTICES.md" Pack="true" PackagePath="THIRD_PARTY_NOTICES.md" />
-    <None Include="..\..\profiles\*.json" Pack="true" PackagePath="tools\net10.0\any\profiles\" />
-    <None Include="..\..\schemas\*.json" Pack="true" PackagePath="tools\net10.0\any\schemas\" />
+    <None Include="..\..\profiles\*.json" Pack="true" PackagePath="tools/net10.0/any/profiles/" />
+    <None Include="..\..\schemas\*.json" Pack="true" PackagePath="tools/net10.0/any/schemas/" />
     <None Include="..\..\docs\AGENT_WORKFLOW.md;..\..\docs\COMPATIBILITY.md;..\..\docs\CONFIGURATION.md;..\..\docs\PROFILE_CONTRIBUTING.md;..\..\docs\PROFILE_SUBMISSION_TEMPLATE.md"
-          Pack="true" PackagePath="tools\net10.0\any\docs\" />
+          Pack="true" PackagePath="tools/net10.0/any/docs/" />
     <PackageDownload Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="[10.0.303]" />
     <PackageDownload Include="Meziantou.Analyzer" Version="[3.0.224]" />
   </ItemGroup>
