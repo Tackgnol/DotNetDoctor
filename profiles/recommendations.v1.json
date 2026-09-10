@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "recommendations": [
+    {
+      "context": "ASP.NET Core services with supporting libraries and C# test projects",
+      "profileFile": "bootstrap-server-core.json",
+      "profileId": "bootstrap/server-core",
+      "profileVersion": "0.1.0",
+      "sha256": "adbb0eca5f161d7a8ca84cfbb82bacc637ce74b584d16f3b5b62a1ceb6182012"
+    }
+  ]
+}

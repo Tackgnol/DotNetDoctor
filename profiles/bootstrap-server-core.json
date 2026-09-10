@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "bootstrap/server-core",
+  "version": "0.1.0",
+  "title": "Bootstrap server core",
+  "description": "Provisional maintainer starting point for C# server repositories. This is not community consensus; see docs/PROFILE_CONTRIBUTING.md for how a better profile becomes the recommended default.",
+  "targetContext": "ASP.NET Core services with supporting class libraries and C# test projects",
+  "authors": ["repo-doctor maintainers"],
+  "derivedFrom": [],
+  "engineMajor": 0,
+  "rules": {
+    "MA0009": { "severity": "warning", "scope": "all" },
+    "MA0022": { "severity": "error", "scope": "all" },
+    "MA0033": { "severity": "error", "scope": "all" },
+    "MA0040": { "severity": "warning", "scope": "all" },
+    "MA0042": { "severity": "warning", "scope": "all" },
+    "MA0054": { "severity": "warning", "scope": "all" },
+    "MA0100": { "severity": "error", "scope": "all" },
+    "MA0134": { "severity": "warning", "scope": "all" },
+    "CA2000": { "severity": "warning", "scope": "all" },
+    "CA2012": { "severity": "error", "scope": "all" },
+    "CA2200": { "severity": "warning", "scope": "all" },
+    "CA5359": { "severity": "error", "scope": "all" },
+    "NUGET-VULNERABILITY": { "severity": "error", "scope": "all" }
+  },
+  "gate": {
+    "minimumSeverity": "warning",
+    "minimumConfidence": "high"
+  }
+}

@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - run: dotnet restore RepoDoctor.slnx
+      - name: Restore integration fixtures
+        shell: pwsh
+        run: |
+          dotnet restore spike/fixtures/BadProject/BadProject.csproj
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Get-ChildItem tests/Fixtures -Filter *.csproj -Recurse | ForEach-Object {
+            dotnet restore $_.FullName
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - run: dotnet test RepoDoctor.slnx -c Release --no-restore
+      - name: Verify installed package
+        shell: pwsh
+        run: ./scripts/verify-package.ps1

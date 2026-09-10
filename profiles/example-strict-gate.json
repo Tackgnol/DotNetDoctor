@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "example/strict-gate",
+  "version": "0.1.0",
+  "title": "Example: strict gate",
+  "description": "Example profile that keeps the bootstrap rule selection but blocks the gate at error severity and narrows two rules to production code. Demonstrates an intentional policy difference; not a recommended default.",
+  "targetContext": "ASP.NET Core services where only error-severity findings should block CI",
+  "authors": ["repo-doctor maintainers"],
+  "derivedFrom": [],
+  "engineMajor": 0,
+  "rules": {
+    "MA0009": { "severity": "warning", "scope": "production" },
+    "MA0022": { "severity": "error", "scope": "all" },
+    "MA0033": { "severity": "error", "scope": "all" },
+    "MA0040": { "severity": "warning", "scope": "production" },
+    "MA0042": { "severity": "warning", "scope": "all" },
+    "MA0054": { "severity": "warning", "scope": "all" },
+    "MA0100": { "severity": "error", "scope": "all" },
+    "MA0134": { "severity": "warning", "scope": "all" },
+    "CA2000": { "severity": "warning", "scope": "all" },
+    "CA2012": { "severity": "error", "scope": "all" },
+    "CA2200": { "severity": "warning", "scope": "all" },
+    "CA5359": { "severity": "error", "scope": "all" },
+    "NUGET-VULNERABILITY": { "severity": "error", "scope": "all" }
+  },
+  "gate": {
+    "minimumSeverity": "error",
+    "minimumConfidence": "high"
+  }
+}

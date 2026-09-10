@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Validate tag
+        id: version
+        shell: pwsh
+        run: |
+          $version = '${{ github.ref_name }}' -replace '^v', ''
+          if ($version -notmatch '^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$') {
+            throw "Tag '${{ github.ref_name }}' is not a supported SemVer release tag."
+          }
+          "value=$version" >> $env:GITHUB_OUTPUT
+
+      - run: dotnet restore RepoDoctor.slnx
+      - name: Restore integration fixtures
+        shell: pwsh
+        run: |
+          dotnet restore spike/fixtures/BadProject/BadProject.csproj
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Get-ChildItem tests/Fixtures -Filter *.csproj -Recurse | ForEach-Object {
+            dotnet restore $_.FullName
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - run: dotnet test RepoDoctor.slnx -c Release --no-restore
+      - name: Verify installed package
+        shell: pwsh
+        run: ./scripts/verify-package.ps1
+      - name: Pack release
+        run: >-
+          dotnet pack src/RepoDoctor.Cli/RepoDoctor.Cli.csproj
+          -c Release --no-restore -o artifacts/package
+          -p:Version=${{ steps.version.outputs.value }}
+          -p:ContinuousIntegrationBuild=true
+
+      - name: Authenticate to NuGet.org
+        uses: NuGet/login@v1
+        id: nuget
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - name: Publish to NuGet.org
+        run: >-
+          dotnet nuget push artifacts/package/*.nupkg
+          --api-key ${{ steps.nuget.outputs.NUGET_API_KEY }}
+          --source https://api.nuget.org/v3/index.json
+          --skip-duplicate
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create '${{ github.ref_name }}'
+          artifacts/package/*.nupkg
+          --verify-tag --generate-notes
+          --title 'RepoDoctor ${{ steps.version.outputs.value }}'

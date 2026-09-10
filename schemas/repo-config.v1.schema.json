@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/repo-doctor/schemas/repo-config.v1.schema.json",
+  "title": "repo-doctor repository configuration (schema version 1)",
+  "description": "`.repo-doctor.json`. Overrides fields of the selected profile for one repository. Paths inside it are relative to this file's directory, never the terminal working directory.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "profile"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "profile": {
+      "type": "string",
+      "description": "Relative path to the selected profile file. Must resolve inside the repository root after canonicalization, including symlinks."
+    },
+    "rules": {
+      "type": "object",
+      "description": "ruleId -> override. Unspecified fields inherit from the selected profile rule. A rule not selected by the profile must specify both severity and scope. May enable any diagnostic registered by the fixed engine bundle.",
+      "maxProperties": 2000,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "severity": { "enum": ["none", "info", "warning", "error"] },
+          "scope": { "enum": ["all", "production"] }
+        }
+      }
+    },
+    "exclude": {
+      "type": "array",
+      "description": "Globs that filter reported source locations (not compilation inputs). Case-sensitive, matched on normalized repository-relative paths with '/' separators.",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimumSeverity", "minimumConfidence"],
+      "properties": {
+        "minimumSeverity": { "enum": ["info", "warning", "error"] },
+        "minimumConfidence": { "enum": ["unknown", "medium", "high"] }
+      }
+    }
+  }
+}

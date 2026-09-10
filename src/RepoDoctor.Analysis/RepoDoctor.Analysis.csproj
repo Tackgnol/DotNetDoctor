@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>RepoDoctor.Analysis</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="RepoDoctor.IntegrationTests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RepoDoctor.Core\RepoDoctor.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Locator" />
+    <PackageReference Include="Microsoft.Build.Framework" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageDownload Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="[10.0.303]" />
+    <PackageDownload Include="Meziantou.Analyzer" Version="[3.0.224]" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <BundledAnalyzerRoot>$(NuGetPackageRoot)</BundledAnalyzerRoot>
+    <BundledAnalyzerRoot Condition="'$(BundledAnalyzerRoot)' == ''">$(NuGetPackageFolders)</BundledAnalyzerRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(BundledAnalyzerRoot)microsoft.codeanalysis.netanalyzers\10.0.303\analyzers\dotnet\Microsoft.CodeAnalysis.NetAnalyzers.dll;$(BundledAnalyzerRoot)microsoft.codeanalysis.netanalyzers\10.0.303\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll;$(BundledAnalyzerRoot)meziantou.analyzer\3.0.224\analyzers\dotnet\roslyn5.6\cs\Meziantou.Analyzer.dll"
+          Link="bundled-analyzers\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          Visible="false" />
+  </ItemGroup>
+
+</Project>

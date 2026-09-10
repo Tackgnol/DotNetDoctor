@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "toolContext": "ASP.NET Core services with supporting libraries and C# test projects",
+  "recommendation": {
+    "profile": "bootstrap/server-core",
+    "version": "0.1.0",
+    "sha256": "adbb0eca5f161d7a8ca84cfbb82bacc637ce74b584d16f3b5b62a1ceb6182012"
+  },
+  "evaluations": [
+    {
+      "name": "checked-in fixtures",
+      "source": "tests/Fixtures and spike/fixtures",
+      "status": "automated",
+      "commands": ["dotnet test RepoDoctor.slnx"]
+    },
+    {
+      "name": "CircuitBreak 0.7.0",
+      "source": "a30251d65742d7a1517acd3e5e935ee519b20ab1",
+      "status": "manually-reviewed",
+      "report": "artifacts/circuitbreak-scan.json",
+      "review": "evaluations/circuitbreak-0.7.0.md"
+    }
+  ]
+}

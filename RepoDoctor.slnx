@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RepoDoctor.Core/RepoDoctor.Core.csproj" />
+    <Project Path="src/RepoDoctor.Analysis/RepoDoctor.Analysis.csproj" />
+    <Project Path="src/RepoDoctor.Cli/RepoDoctor.Cli.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RepoDoctor.Core.Tests/RepoDoctor.Core.Tests.csproj" />
+    <Project Path="tests/RepoDoctor.IntegrationTests/RepoDoctor.IntegrationTests.csproj" />
+  </Folder>
+</Solution>

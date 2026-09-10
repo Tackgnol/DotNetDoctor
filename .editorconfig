@@ -1,0 +1,69 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+
+[*.{json,yml,yaml,csproj,props,targets,sln,slnx}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.cs]
+# Nullable violations are hard errors (reference article section 3).
+dotnet_diagnostic.CS8600.severity = error
+dotnet_diagnostic.CS8601.severity = error
+dotnet_diagnostic.CS8602.severity = error
+dotnet_diagnostic.CS8603.severity = error
+dotnet_diagnostic.CS8604.severity = error
+
+# Member access: no this. qualification.
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
+
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_prefer_braces = true:warning
+dotnet_style_prefer_collection_expression = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+# The brief forbids code comments including XML docs; do not require them.
+dotnet_diagnostic.CS1591.severity = none
+
+# Naming: interfaces begin with I; async methods end with Async.
+# 'warning' here + TreatWarningsAsErrors makes these build errors in src/;
+# they stay visible-but-non-fatal in the throwaway spike (which disables TWAE).
+dotnet_naming_rule.interface_begins_with_i.severity = warning
+dotnet_naming_rule.interface_begins_with_i.symbols = interface_symbol
+dotnet_naming_rule.interface_begins_with_i.style = begins_with_i_style
+dotnet_naming_symbols.interface_symbol.applicable_kinds = interface
+dotnet_naming_symbols.interface_symbol.applicable_accessibilities = *
+dotnet_naming_style.begins_with_i_style.required_prefix = I
+dotnet_naming_style.begins_with_i_style.capitalization = pascal_case
+
+dotnet_naming_rule.async_methods_end_in_async.severity = warning
+dotnet_naming_rule.async_methods_end_in_async.symbols = async_method_symbol
+dotnet_naming_rule.async_methods_end_in_async.style = ends_with_async_style
+dotnet_naming_symbols.async_method_symbol.applicable_kinds = method
+dotnet_naming_symbols.async_method_symbol.applicable_accessibilities = *
+dotnet_naming_symbols.async_method_symbol.required_modifiers = async
+dotnet_naming_style.ends_with_async_style.required_suffix = Async
+dotnet_naming_style.ends_with_async_style.capitalization = pascal_case
+
+[**/{fixtures,Fixtures}/**.cs]
+# Seeded-mistake fixtures: analyzers here are exercised by tests, not enforced.
+dotnet_analyzer_diagnostic.severity = none
+generated_code = false
+
+[tests/**.cs]
+# xUnit fact/theory names use Method_Does_Thing on purpose.
+dotnet_diagnostic.CA1707.severity = none
+# Inline expected arrays in assertions read better than hoisted static fields.
+dotnet_diagnostic.CA1861.severity = none

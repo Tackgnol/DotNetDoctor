@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>RepoDoctor.Cli</RootNamespace>
+    <AssemblyName>repo-doctor</AssemblyName>
+    <RollForward>LatestMinor</RollForward>
+
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>repo-doctor</ToolCommandName>
+    <PackageId>RepoDoctor.Cli</PackageId>
+    <Version>0.1.0-beta.1</Version>
+    <Title>RepoDoctor</Title>
+    <Authors>RepoDoctor contributors</Authors>
+    <Description>Deterministic, pinned analyzer scans for SDK-style C# repositories.</Description>
+    <PackageTags>dotnet;tool;static-analysis;roslyn;code-quality</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/Tackgnol/DotNetDoctor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Tackgnol/DotNetDoctor</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RepoDoctor.Core\RepoDoctor.Core.csproj" />
+    <ProjectReference Include="..\RepoDoctor.Analysis\RepoDoctor.Analysis.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\profiles\bootstrap-server-core.json" LogicalName="RepoDoctor.Cli.Profiles.bootstrap-server-core.json" />
+    <EmbeddedResource Include="..\..\profiles\recommendations.v1.json" LogicalName="RepoDoctor.Cli.recommendations.v1.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\THIRD_PARTY_NOTICES.md" Pack="true" PackagePath="THIRD_PARTY_NOTICES.md" />
+    <None Include="..\..\profiles\*.json" Pack="true" PackagePath="tools\net10.0\any\profiles\" />
+    <None Include="..\..\schemas\*.json" Pack="true" PackagePath="tools\net10.0\any\schemas\" />
+    <None Include="..\..\docs\AGENT_WORKFLOW.md;..\..\docs\COMPATIBILITY.md;..\..\docs\CONFIGURATION.md;..\..\docs\PROFILE_CONTRIBUTING.md;..\..\docs\PROFILE_SUBMISSION_TEMPLATE.md"
+          Pack="true" PackagePath="tools\net10.0\any\docs\" />
+    <PackageDownload Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="[10.0.303]" />
+    <PackageDownload Include="Meziantou.Analyzer" Version="[3.0.224]" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <BundledAnalyzerRoot>$(NuGetPackageRoot)</BundledAnalyzerRoot>
+    <BundledAnalyzerRoot Condition="'$(BundledAnalyzerRoot)' == ''">$(NuGetPackageFolders)</BundledAnalyzerRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(BundledAnalyzerRoot)microsoft.codeanalysis.netanalyzers\10.0.303\analyzers\dotnet\Microsoft.CodeAnalysis.NetAnalyzers.dll;$(BundledAnalyzerRoot)microsoft.codeanalysis.netanalyzers\10.0.303\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll;$(BundledAnalyzerRoot)meziantou.analyzer\3.0.224\analyzers\dotnet\roslyn5.6\cs\Meziantou.Analyzer.dll"
+          Link="bundled-analyzers\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          Visible="false" />
+  </ItemGroup>
+
+</Project>

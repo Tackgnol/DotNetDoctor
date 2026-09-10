@@ -1,0 +1,15 @@
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+*.user
+.vs/
+.idea/
+artifacts/
+
+# External repository used as a local scan target
+CircuitBreak-master/
+
+# Milestone 0 spike local pack/install output
+spike/_pkg/
+spike/_tool/
