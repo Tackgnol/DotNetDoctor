@@ -32,6 +32,7 @@ public sealed class ScanEngineTests
         return new ScanRequest
         {
             Target = Path.Combine(root, target),
+            RepositoryConfigPath = Path.Combine(root, ".repo-doctor.json"),
             ToolVersion = "0.0.0-test",
             Policy = policy,
             Catalog = catalog,
@@ -49,7 +50,7 @@ public sealed class ScanEngineTests
         Assert.Equal(GateStatus.Passed, outcome.Report.Gate.Status);
 
         var ca2200 = Assert.Single(outcome.Report.Findings, f => f.RuleId == "CA2200");
-        Assert.Equal("Rethrower.cs", ca2200.Location!.FilePath);
+        Assert.Equal("spike/fixtures/BadProject/Rethrower.cs", ca2200.Location!.FilePath);
         Assert.Equal(15, ca2200.Location.StartLine);
         Assert.StartsWith("fp1:", ca2200.Fingerprint);
         Assert.Equal("M:BadProject.Rethrower.RethrowLosesStackTrace_Reported", ca2200.SymbolId);

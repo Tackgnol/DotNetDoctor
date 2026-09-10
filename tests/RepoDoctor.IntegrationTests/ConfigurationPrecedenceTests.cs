@@ -34,6 +34,7 @@ public sealed class ConfigurationPrecedenceTests
             new ScanRequest
             {
                 Target = Path.Combine(RepoRoot(), "tests", "Fixtures", fixtureProject),
+                RepositoryConfigPath = Path.Combine(RepoRoot(), ".repo-doctor.json"),
                 ToolVersion = "0.0.0-test",
                 Policy = policy,
                 Catalog = Catalog,
@@ -60,7 +61,7 @@ public sealed class ConfigurationPrecedenceTests
     {
         var report = await ScanAsync("EditorConfigMatrix/EditorConfigMatrix.csproj");
 
-        var finding = Assert.Single(report.Findings, f => f.RuleId == "CA2200" && f.Location!.FilePath == "Reported.cs");
+        var finding = Assert.Single(report.Findings, f => f.RuleId == "CA2200" && f.Location!.FilePath == "tests/Fixtures/EditorConfigMatrix/Reported.cs");
         Assert.Equal(RuleSeverity.Error, finding.Severity);
         Assert.Equal(PolicySource.AnalyzerConfig, finding.PolicySource);
     }
@@ -70,7 +71,7 @@ public sealed class ConfigurationPrecedenceTests
     {
         var report = await ScanAsync("EditorConfigMatrix/EditorConfigMatrix.csproj");
 
-        Assert.DoesNotContain(report.Findings, f => f.Location!.FilePath.StartsWith("Silenced/", StringComparison.Ordinal));
+        Assert.DoesNotContain(report.Findings, f => f.Location!.FilePath.Contains("/Silenced/", StringComparison.Ordinal));
         Assert.DoesNotContain(report.Findings, f => f.Location!.FilePath.EndsWith(".g.cs", StringComparison.Ordinal));
     }
 
@@ -92,7 +93,7 @@ public sealed class ConfigurationPrecedenceTests
 
         var finding = Assert.Single(report.Findings, f => f.RuleId == "CA2000");
         Assert.Equal(RuleSeverity.Warning, finding.Severity);
-        Assert.Equal("Leaky.cs", finding.Location!.FilePath);
+        Assert.Equal("tests/Fixtures/DisabledDefault/Leaky.cs", finding.Location!.FilePath);
     }
 
     [Fact]
@@ -120,7 +121,7 @@ public sealed class ConfigurationPrecedenceTests
         var report = await ScanAsync("ExcludeMatrix/ExcludeMatrix.csproj", config);
 
         Assert.False(report.Analysis.Projects.Single(p => p.IsSubject).IsTestProject);
-        var finding = Assert.Single(report.Findings, f => f.RuleId == "CA2200" && f.Location!.FilePath == "Keep.cs");
+        var finding = Assert.Single(report.Findings, f => f.RuleId == "CA2200" && f.Location!.FilePath == "tests/Fixtures/ExcludeMatrix/Keep.cs");
         Assert.Equal(RuleSeverity.Warning, finding.Severity);
     }
 
@@ -129,7 +130,7 @@ public sealed class ConfigurationPrecedenceTests
     {
         var report = await ScanAsync("ExcludeMatrix/ExcludeMatrix.csproj", Config(exclude: ["**/Migrations/**"]));
 
-        Assert.Contains(report.Findings, f => f.Location!.FilePath == "Keep.cs");
+        Assert.Contains(report.Findings, f => f.Location!.FilePath == "tests/Fixtures/ExcludeMatrix/Keep.cs");
         Assert.DoesNotContain(report.Findings, f => f.Location!.FilePath.Contains("Migrations", StringComparison.Ordinal));
         Assert.Contains(report.Analysis.Problems, p => p.Stage == "exclude");
     }
