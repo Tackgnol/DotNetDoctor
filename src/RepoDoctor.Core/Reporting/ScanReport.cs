@@ -21,6 +21,8 @@ public sealed record ScanReport
 
     public required IReadOnlyList<Finding> Findings { get; init; }
 
+    public ScoreInfo Score { get; init; } = ScoreEvaluation.NotEvaluated("analysis did not complete");
+
     public ComparisonInfo? Comparison { get; init; }
 
     public AuditInfo? Audit { get; init; }

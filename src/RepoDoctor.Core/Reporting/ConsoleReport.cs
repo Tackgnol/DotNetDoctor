@@ -15,6 +15,7 @@ public static class ConsoleReport
         text.Append("repo-doctor ").Append(report.Tool.Version).Append('\n');
         text.Append("analysis:  ").Append(report.Analysis.Completeness.ToString().ToLowerInvariant()).Append('\n');
         text.Append("gate:      ").Append(GateLine(report.Gate)).Append('\n');
+        text.Append("score:     ").Append(ScoreLine(report.Score)).Append('\n');
         text.Append("profile:   ").Append(report.Policy.ProfileId).Append('@').Append(report.Policy.ProfileVersion)
             .Append(" (").Append(Short(report.Policy.EffectivePolicyHash)).Append(")\n");
 
@@ -76,6 +77,19 @@ public static class ConsoleReport
         }
 
         return text.ToString();
+    }
+
+    private static string ScoreLine(ScoreInfo score)
+    {
+        if (score.Value is null || score.Penalty is null)
+        {
+            return $"not evaluated ({score.NotEvaluatedReason ?? "unknown reason"})";
+        }
+
+        var text = $"{score.Value}/100 (penalty {score.Penalty})";
+        return score.BaselineScoreDelta is null || score.BaselinePenaltyDelta is null
+            ? text
+            : $"{text}; baseline {score.BaselineScoreDelta:+0;-0;0} score, {score.BaselinePenaltyDelta:+0;-0;0} penalty";
     }
 
     private static string GateLine(GateResult gate) => gate.Status switch

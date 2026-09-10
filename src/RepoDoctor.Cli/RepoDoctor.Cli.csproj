@@ -9,7 +9,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>repo-doctor</ToolCommandName>
     <PackageId>RepoDoctor.Cli</PackageId>
-    <Version>0.1.0-beta.1</Version>
+    <Version>0.1.0-beta.2</Version>
     <Title>RepoDoctor</Title>
     <Authors>RepoDoctor contributors</Authors>
     <Description>Deterministic, pinned analyzer scans for SDK-style C# repositories.</Description>

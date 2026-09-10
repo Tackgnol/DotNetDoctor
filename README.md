@@ -7,13 +7,13 @@ Deterministic, pinned analyzer scans for SDK-style C# repositories.
 .NET 10 can run the tool without installing it or changing `PATH`:
 
 ```text
-dotnet tool exec RepoDoctor.Cli@0.1.0-beta.1 -- scan ./YourSolution.slnx
+dotnet tool exec RepoDoctor.Cli@0.1.0-beta.2 -- scan ./YourSolution.slnx
 ```
 
 For regular use, install it for the current user. Administrator privileges are not required:
 
 ```text
-dotnet tool install --global RepoDoctor.Cli --version 0.1.0-beta.1
+dotnet tool install --global RepoDoctor.Cli --version 0.1.0-beta.2
 repo-doctor init .
 dotnet restore
 repo-doctor scan ./YourSolution.slnx
@@ -23,7 +23,7 @@ To pin the tool version in a repository instead:
 
 ```text
 dotnet new tool-manifest
-dotnet tool install RepoDoctor.Cli --version 0.1.0-beta.1
+dotnet tool install RepoDoctor.Cli --version 0.1.0-beta.2
 dotnet tool run repo-doctor -- scan ./YourSolution.slnx
 ```
 
@@ -39,6 +39,10 @@ repo-doctor scan ./YourSolution.slnx --audit --format json --output artifacts/au
 The vendored profile and `.repo-doctor.json` pin policy locally. `--audit` runs the SDK's machine-readable direct and transitive vulnerability check against restored projects; a failed or unverifiable audit makes the scan incomplete instead of silently reporting clean. See `docs/AGENT_WORKFLOW.md`, `docs/COMPATIBILITY.md`, and `docs/PROFILE_CONTRIBUTING.md`.
 
 For stricter opt-in async and evaluated project-policy checks, vendor `profiles/dotnet-code-quality.json` and select it in `.repo-doctor.json`. The default bootstrap profile is unchanged; see `docs/CONFIGURATION.md#project-configuration-checks`.
+
+## Score (experimental)
+
+Complete scans report `score = max(0, 100 - penalty)`: errors cost 10, warnings 3, and info findings 1. `penalty` is not capped; valid baseline comparisons also report score and penalty deltas. The gate remains independent and authoritative.
 
 ## No-admin local run
 

@@ -368,6 +368,7 @@ public static class ScanEngine
         {
             Comparison = comparison.ToComparisonInfo(),
             Audit = auditInfo,
+            Score = ScoreEvaluation.Evaluate(section.Completeness, comparison.HeadFindings, baseline.Findings),
         };
         return new ScanOutcome(finalReport, GateEvaluation.ExitCode(false, completeness, gate), Cancelled: false);
     }
@@ -488,6 +489,7 @@ public static class ScanEngine
             Provenance = GitProvenance.TryRead(discovery.RepositoryRoot),
             Analysis = analysis,
             Findings = findings,
+            Score = ScoreEvaluation.Evaluate(analysis.Completeness, findings),
             Comparison = null,
             Audit = auditInfo,
             Gate = gate,
